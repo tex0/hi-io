@@ -7,8 +7,5 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "tex0",
-  "license": "MIT",
-  "dependencies": {
-    "hi.tasks": "https://github.com/tex0/hi.tasks.git"
-  }
+  "license": "MIT"
 }
