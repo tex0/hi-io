@@ -29,11 +29,11 @@ function OpenFile(fileName, openOption, context) {
     var lBegin = function (context) {
 		var ln = context.task.Continue(lStats.bind(this))
 		mFs.stat(fileName, function (err, stats) {
-			if (openOption == File.OpenOptions.ReadWriteF)
-				context.task.Next(err, stats);
-			else if (openOption == File.OpenOptions.ReadWrite) {
+			if (openOption == File.OpenOptions.ReadWrite) {
 				context.task.Next(null, stats);
 			}
+			else
+				context.task.Next(err, stats);
         });
     }
     
