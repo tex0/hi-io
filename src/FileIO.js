@@ -5,7 +5,7 @@ var mFs = require('fs');
 var mBuffer = require('buffer');
 var mPath = require('path');
 
-var mTasks = require('../Flow/Task.js');
+var mTasks = require('hi.tasks');
 
 var tasksNs = new mTasks();
 
