@@ -160,7 +160,35 @@ Directory.GetFiles = function (directory, context) {
 		context.task.Next(new Error("The 'directory' parameter is not of string path or object of 'Directory' type."));
 		return;
 	}
-	
+
+	var lFiles = [];
+
+	var lStat = function (context, stat, currName, names) {
+		if (currName == null || currName === undefined)
+			context.task.Next(null, lFiles);
+		else {
+			if (stat != null && stat !== undefined && stat.isFile()) {
+				lFiles.push(currName);
+			}
+			if (names.length == 0)
+				context.task.Next(null, lFiles);
+			else
+			{
+				context.task.Continue(lGetStatNextFile);
+				context.task.Next(null, names);
+			}
+		}
+	}
+
+	var lGetStatNextFile = function (context, names) {
+		var lName = names.shift();
+		context.task.Continue(lStat);
+		mFs.stat(lName, function (err, stat) {
+			context.task.Next(null, stat, lName, names);
+		});
+	}
+
+	context.task.Continue(lGetStatNextFile);
 	mFs.readdir(lPath, function (err, files) {
 		context.task.Next(err, files);
 	});
@@ -185,10 +213,15 @@ Directory.GetDirectories = function (directory, context) {
 			context.task.Next(null, lDirs);
 		else {
 			if (stat != null && stat !== undefined && stat.isDirectory()) {
-				lDir.push(new Directory(currName, stat));
+				lDirs.push(new Directory(currName, stat));
 			}
-			context.task.Continue(lGetStatNextDir);
-			context.task.Next(null, names);
+			if (names.length == 0)
+				context.task.Next(null, lDirs);
+			else
+			{
+				context.task.Continue(lGetStatNextDir);
+				context.task.Next(null, names);
+			}
 		}
 	}
 	
@@ -196,7 +229,7 @@ Directory.GetDirectories = function (directory, context) {
 		var lName = names.shift();
 		context.task.Continue(lStat);
 		mFs.stat(lName, function (err, stat) {
-			context.task.Next(null, stat, name, names);
+			context.task.Next(null, stat, lName, names);
 		});
 	}
 	
