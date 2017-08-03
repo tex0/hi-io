@@ -360,9 +360,4 @@ File.ChunkMeasure = new ChunkMeasure();
 
 module.exports = function () {
 	this.File = File;
-
-	this.ReadedContainerBlockEventArgs = lReadedBlockEventArgs;
-	this.ClosingEventArgs = lClosingEventArgs;
-	this.ClosedEventArgs = lClosedEventArgs;
-	this.OpenedFileEventArgs = lOpenedFileEventArgs;
 }
