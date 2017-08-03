@@ -5,7 +5,7 @@ var mFs = require('fs');
 var mBuffer = require('buffer');
 var mPath = require('path');
 
-var mTasks = require('../Flow/Task.js');
+var mTasks = require('hi.tasks');
 
 var tasksNs = new mTasks();
 
@@ -360,9 +360,4 @@ File.ChunkMeasure = new ChunkMeasure();
 
 module.exports = function () {
 	this.File = File;
-
-	this.ReadedContainerBlockEventArgs = lReadedBlockEventArgs;
-	this.ClosingEventArgs = lClosingEventArgs;
-	this.ClosedEventArgs = lClosedEventArgs;
-	this.OpenedFileEventArgs = lOpenedFileEventArgs;
 }
