@@ -5,10 +5,6 @@ var mFs = require('fs');
 var mBuffer = require('buffer');
 var mPath = require('path');
 
-var mTasks = require('hi.tasks');
-
-var tasksNs = new mTasks();
-
 function OpenFile(fileName, openOption, context) {
     var lOpen = function (context, fd, stats) {
         this.fd_ = fd;

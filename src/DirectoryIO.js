@@ -106,7 +106,7 @@ function deleteDir(basePath, currentPath, context) {
 			}
 		}
 		else {
-			var lErr = new Error("[DirectoryIO] \'deleteDir\': unhandled exception (stats of FS object is null or undefined!).");
+			var lErr = new Error("[DirectoryIO] 'deleteDir': unhandled exception (stats of FS object is null or undefined).");
 			context.task.Next(lErr);
 		}
 	}
