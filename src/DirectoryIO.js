@@ -2,6 +2,8 @@
 var mBuffer = require('buffer');
 var mPath = require('path');
 
+var lHelper = require('./helper');
+
 var mFileIO = require('./FileIO.js');
 
 var fileIO = new mFileIO();
@@ -19,23 +21,28 @@ Directory.prototype = {
     }
 }
 Directory.prototype.GetFiles = function (context) { 
+	lHelper.checkTaskContext(context);
 	Directory.GetFiles(this, context);
 }
 Directory.prototype.GetDirectories = function (context){
+	lHelper.checkTaskContext(context);
 	Directory.GetDirectories(this, context);
 }
 Directory.prototype.CreateChild = function (childDirectoryName, context){
+	lHelper.checkTaskContext(context);
 	Directory.Create(mPath.join(this.path_, childDirectoryName), context);
 }
 Directory.prototype.DeleteChild = function (childDirectoryName, context){
+	lHelper.checkTaskContext(context);
 	Directory.Delete(mPath.join(this.path_, childDirectoryName), context);
 }
 Directory.prototype.CreateFile = function (fileName, force, context){
+	lHelper.checkTaskContext(context);
 	fileIO.File.Create(mPath.join(this.path_, fileName), force, context);
 }
 
 Directory.Create = function (path, context){
-	
+	lHelper.checkTaskContext(context);
 	var lStat = function (context, stat){
 		var lErr = null;
 		var lDir = null;
@@ -75,7 +82,7 @@ Directory.Create = function (path, context){
 }
 
 function deleteDir(basePath, currentPath, context) {
-	
+	lHelper.checkTaskContext(context);
 	function readDir(path, context) {
 		mFs.readdir(path, function (err, files) {
 			context.task.Next(err, path, files);
@@ -136,6 +143,7 @@ function deleteDir(basePath, currentPath, context) {
 }
 
 Directory.Delete = function (directory, context) {
+	lHelper.checkTaskContext(context);
 	var lPath = null;
 	if (directory instanceof Directory)
 		lPath = directory.Path;
@@ -144,11 +152,13 @@ Directory.Delete = function (directory, context) {
 	deleteDir(lPath, lPath, context);
 }
 Directory.DirectoryFromPath = function (path, context) {
+	lHelper.checkTaskContext(context);
 	mFs.stat(path, function (err, stat) { 
 		context.task.Next(err, new Directory(path, stat));
 	});
 }
 Directory.GetFiles = function (directory, context) {
+	lHelper.checkTaskContext(context);
 	var lPath = null;
 	if (directory instanceof Directory) {
 		lPath = directory.Path;
@@ -194,6 +204,7 @@ Directory.GetFiles = function (directory, context) {
 	});
 }
 Directory.GetDirectories = function (directory, context) {
+	lHelper.checkTaskContext(context);
 	var lPath = null;
 	if (directory instanceof Directory) {
 		lPath = directory.Path;

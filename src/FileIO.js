@@ -4,11 +4,7 @@
 var mFs = require('fs');
 var mBuffer = require('buffer');
 var mPath = require('path');
-
-function checkContext(context){
-	if (!context || !context.task)
-		throw new Error("The context is not object of Task");
-}
+var lHelper = require('./helper');
 
 function OpenFile(fileName, openOption, context) {
     var lOpen = function (context, fd, stats) {
@@ -152,26 +148,26 @@ File.prototype = {
 	}
 }
 File.prototype.Open = function (context, openOption) {
-	checkContext(context);
+	lHelper.checkTaskContext(context);
 	if (openOption === undefined || openOption == null)
 		openOption = File.OpenOptions.ReadWriteF;
     OpenFile.call(this, this.fileFullName_, openOption, context);
 }
 File.prototype.Read = function (count, startPosition, context) {
-	checkContext(context);
+	lHelper.checkTaskContext(context);
     ReadFile.call(this, this.fd_, this.stats_, count, startPosition, context);
 }
 File.prototype.Write = function (buffer, buffOffset, length, startWriteFilePosition, context) {
-	checkContext(context);
+	lHelper.checkTaskContext(context);
     WriteFile.call(this, this.fd_, buffer, buffOffset, length, startWriteFilePosition, context);
 }
 File.prototype.Close = function (context) {
-	checkContext(context);
+	lHelper.checkTaskContext(context);
     CloseFile.call(this, this.fd_, context)
 }
 
 File.Create = function (fullName, force, context){
-	checkContext(context);
+	lHelper.checkTaskContext(context);
 	var lFile = new File(fullName);
 		
 	var lOpen = function (context){
@@ -200,7 +196,7 @@ File.Create = function (fullName, force, context){
 }
 
 File.Stat = function (path, thrownError, context){
-	checkContext(context);
+	lHelper.checkTaskContext(context);
 	var lStat = function (context, thrown) {
 		mFs.stat(path, function (err, stat) {
 			context.Stat = stat;
@@ -215,7 +211,7 @@ File.Stat = function (path, thrownError, context){
 }
 
 File.Exists = function (path, context){
-	checkContext(context);
+	lHelper.checkTaskContext(context);
 	var lStat = function (context, err) { 
 		if (err && err.code === 'ENOENT')
 			context.task.Next(null, err);
@@ -227,7 +223,7 @@ File.Exists = function (path, context){
 }
 
 File.Copy = function (from, to, forced, context) {//!!! доделать
-	checkContext(context);
+	lHelper.checkTaskContext(context);
 	var lGoCopy = function (context){
 		mFs.link(from, to, function (err) {
 			if (forced === true)
@@ -240,7 +236,7 @@ File.Copy = function (from, to, forced, context) {//!!! доделать
 	context.task.Next();
 }
 File.Delete = function (path, context) {    
-	checkContext(context);
+	lHelper.checkTaskContext(context);
     var lUnlink = function (context, stat) {
         if (!stat.isFile()) {
 			context.task.Next(new Error('Deleting target is not a file!'));
@@ -261,7 +257,7 @@ File.Delete = function (path, context) {
 }
 
 File.Move = function (from, to, context){//!!!
-	checkContext(context);
+	lHelper.checkTaskContext(context);
 	var lDelete = function (context){
 		File.Delete(from, context);
 	}
@@ -275,7 +271,7 @@ File.Move = function (from, to, context){//!!!
 }
 
 File.ReadAll = function (path, context) {
-	checkContext(context);
+	lHelper.checkTaskContext(context);
 	var lResult = function (context, data) {
 		context.task.Next(null, data);
 	}
@@ -291,7 +287,7 @@ File.ReadAll = function (path, context) {
 	context.task.Next();
 }
 File.Append = function (path, buffer, context) {
-	checkContext(context);
+	lHelper.checkTaskContext(context);
     var lAppended = function (context) {
         context.task.Next();
     }
@@ -307,7 +303,7 @@ File.Append = function (path, buffer, context) {
 
 }
 File.AppendString = function (path, str, encoding, context) {
-	checkContext(context);
+	lHelper.checkTaskContext(context);
     var lBuffer = new mBuffer.Buffer(str, encoding);
     File.Append(path, lBuffer, context);
 }
