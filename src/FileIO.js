@@ -222,7 +222,7 @@ File.Exists = function (path, context){
 	File.Stat(path, false, context);
 }
 
-File.Copy = function (from, to, forced, context) {//!!! доделать
+File.Copy = function (from, to, forced, context) {
 	lHelper.checkTaskContext(context);
 	var lGoCopy = function (context){
 		mFs.link(from, to, function (err) {
@@ -256,7 +256,7 @@ File.Delete = function (path, context) {
 	context.task.Next();
 }
 
-File.Move = function (from, to, forced, context){//!!!
+File.Move = function (from, to, forced, context){
 	lHelper.checkTaskContext(context);
 	var lDelete = function (context){
 		File.Delete(from, context);
