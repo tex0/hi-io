@@ -14,8 +14,6 @@ function OpenFile(fileName, openOption, context) {
         this.fd_ = fd;
         this.stats_ = stats;
         this.opened_ = this.fd_ && this.stats_;
-        context.task.Result.Fd = fd;
-		context.task.Result.Stat = stats;
 		context.task.Next(null, this);
     }
     
@@ -49,8 +47,6 @@ function ReadFile(fd, stats, count, startPosition, context) {
 		
 		if (stats.size <= currentPos) {
 			this.currentPosition_ = count + startPosition;
-			context.task.Result.fd = fd;
-			context.task.Result.buffer = resultBuff;
 			context.task.Next(null, this, resultBuff, this.currentPosition_);
             return;
         }
