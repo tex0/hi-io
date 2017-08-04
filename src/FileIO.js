@@ -256,7 +256,7 @@ File.Delete = function (path, context) {
 	context.task.Next();
 }
 
-File.Move = function (from, to, context){//!!!
+File.Move = function (from, to, forced, context){//!!!
 	lHelper.checkTaskContext(context);
 	var lDelete = function (context){
 		File.Delete(from, context);
@@ -264,7 +264,7 @@ File.Move = function (from, to, context){//!!!
 
 	var lCopy = function (context){
 		context.task.Continue(lDelete);
-		File.Copy(from, to, context);
+		File.Copy(from, to, forced, context);
 	}
 	context.task.Continue(lCopy);
 	context.task.Next();
